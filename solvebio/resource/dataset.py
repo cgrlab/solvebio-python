@@ -38,9 +38,15 @@ class Dataset(CreateableAPIResource, ListableAPIResource,
                 raise e
 
         # Split the name into parts
-        try:
-            depo, version, dataset = full_name.split('/')
-        except ValueError:
+        split_name = full_name.split('/')
+
+        if len(split_name) == 2:
+            # Short name. Will use latest version by default
+            depo, dataset = split_name
+            version = None
+        elif len(split_name) == 3:
+            depo, version, dataset = split_name
+        else:
             raise ValueError(
                 "Invalid dataset name '{0}'. Please ensure that it is "
                 "in the following format: '<depository>/<version>/<dataset>'"
@@ -53,14 +59,17 @@ class Dataset(CreateableAPIResource, ListableAPIResource,
                 raise e
             depo = Depository.create(name=depo, title=depo)
 
-        try:
-            version = DepositoryVersion.retrieve(
-                '{0}/{1}'.format(depo.name, version))
-        except SolveError as e:
-            if e.status_code != 404:
-                raise e
-            version = DepositoryVersion.create(
-                depository_id=depo.id, name=version, title=version)
+        if version:
+            try:
+                version = DepositoryVersion.retrieve(
+                    '{0}/{1}'.format(depo.name, version))
+            except SolveError as e:
+                if e.status_code != 404:
+                    raise e
+                version = DepositoryVersion.create(
+                    depository_id=depo.id, name=version, title=version)
+        else:
+            version = depo.latest_version()
 
         try:
             return Dataset.retrieve(

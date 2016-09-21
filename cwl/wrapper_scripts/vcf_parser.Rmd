@@ -1,0 +1,106 @@
+## solvebio vcf_parser {.tabset}
+
+```{r include = FALSE}
+require(rmarkdown); require(knitr); require(sevenbridges); require(readr)
+
+options(max.print = "99"); opts_knit$set(width = 99)
+opts_chunk$set(cache=FALSE, tidy=FALSE)
+
+source("~/sbg_auth.R")
+
+```
+
+Quickly generates a json from a .vcf or .vcf.gz
+
+### Base Command
+
+```{sh base command, eval=FALSE}
+
+python solvebio-python/solvebio/contrib/vcf_parser/vcf_parser.py input.vcf > output.vcf.json
+
+```
+
+### I/O {.tabset}
+
+#### Inputs
+
+```{r inputs}
+inputs = list(
+  
+input(id = "vcf", label = "vcf", description = ".vcf or .vcf.gz", type = "File", position = 1)
+
+)
+
+```
+
+#### Arguments
+
+```{r arguments}
+
+arguments = (CCBList(
+  
+CommandLineBinding(position = 2, prefix = ">", valueFrom = list("{return $job.inputs.vcf.name + \".json\"}")),
+  
+CommandLineBinding(position = 3, valueFrom = list("\"&& ls -lR \""))
+  
+))
+
+```
+
+#### Outputs
+
+```{r output}
+
+outputs = list(
+
+output(id = "json", label = "json", 
+description = "vcf converted to json", type = "File",
+inheritMetadataFrom = "#vcf", metadata = list(tool_created_by = "vcf_parser"),
+glob = Expression(engine = "#cwl-js-engine",
+script = "\"*.vcf.json\""))
+  
+)
+
+
+```
+
+### Portability {.tabset}
+
+#### Docker
+
+The docker conatiner is
+
+``` cgrlab/solvebio-python:latest ```
+
+#### Tool Definition
+
+```{r 5 create tool object}
+
+tool <- Tool(
+id = "vcf-parser", 
+label = "VCF Parser",
+hints = requirements(docker(pull = "cgrlab/solvebio-python:latest"), cpu(1), mem(1000)),
+baseCommand = "python /opt/solvebio-python/solvebio/contrib/vcf_parser/vcf_parser.py",
+inputs = inputs,
+arguments = arguments,
+outputs = outputs)
+
+
+```
+
+#### Make CWL File
+
+```{r eval=create_cwl=="yes"}
+
+write(tool$toJSON(pretty = TRUE), "../vcf_parser.json")
+
+```
+
+#### Push App To CGC Platform
+
+```{r eval=platform_push=="yes"}
+
+project$app_add("vcf-parser", tool)
+
+
+```

@@ -10,12 +10,12 @@ python-pip \
 python-dev \ 
 build-essential \
 pypy \
-numpy \
 git
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade virtualenv
 RUN pip install gnureadline
+RUN pip install numpy
 RUN pip install PyVCF
 
 RUN git clone https://github.com/solvebio/solvebio-python.git

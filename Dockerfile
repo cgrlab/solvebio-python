@@ -14,7 +14,6 @@ git
 
 RUN pip install --upgrade pip
 RUN pip install --upgrade virtualenv
-RUN pip install gnureadline
 RUN pip install numpy
 RUN pip install PyVCF
 

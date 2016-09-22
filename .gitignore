@@ -21,3 +21,5 @@ tests/.coverage
 .Rproj.user
 *.Rproj
 *.Rhistory
+cwl/wrapper_scripts/*.html
+*.RData

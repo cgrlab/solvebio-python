@@ -65,7 +65,7 @@
       "separate": true,
       "valueFrom": {
         "engine": "#cwl-js-engine",
-        "script": "{return $job.inputs.vcf.name + \".json\"}",
+        "script": "{var name = $job.inputs.vcf.name.split(\".vcf\")[0]; return name + \".vcf.json\"}",
         "class": "Expression"
       }
     },
@@ -74,9 +74,10 @@
       "separate": true,
       "valueFrom": {
         "engine": "#cwl-js-engine",
-        "script": "\"&& ls -lR \"",
+        "script": "\"&& ls -lhrt\"",
         "class": "Expression"
       }
     }
-  ]
+  ],
+  "stdout": "std.out"
 }

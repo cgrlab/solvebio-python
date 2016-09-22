@@ -39,9 +39,9 @@ input(id = "vcf", label = "vcf", description = ".vcf or .vcf.gz", type = "File",
 
 arguments = (CCBList(
   
-CommandLineBinding(position = 2, prefix = ">", valueFrom = list("{return $job.inputs.vcf.name + \".json\"}")),
+CommandLineBinding(position = 2, prefix = ">", valueFrom = list('{var name = $job.inputs.vcf.name.split(".vcf")[0]; return name + ".vcf.json"}')),
   
-CommandLineBinding(position = 3, valueFrom = list("\"&& ls -lR \""))
+CommandLineBinding(position = 3, valueFrom = list('"&& ls -lhrt"'))
   
 ))
 
@@ -57,7 +57,7 @@ output(id = "json", label = "json",
 description = "vcf converted to json", type = "File",
 inheritMetadataFrom = "#vcf", metadata = list(tool_created_by = "vcf_parser"),
 glob = Expression(engine = "#cwl-js-engine",
-script = "\"*.vcf.json\""))
+script = '"*.vcf.json"'))
   
 )
 
@@ -77,12 +77,13 @@ The docker conatiner is
 ```{r 5 create tool object}
 
 tool <- Tool(
-id = "vcf-parser", 
+id = "vcf-parser",
 label = "VCF Parser",
 hints = requirements(docker(pull = "cgrlab/solvebio-python:latest"), cpu(1), mem(1000)),
 baseCommand = "python /opt/solvebio-python/solvebio/contrib/vcf_parser/vcf_parser.py",
 inputs = inputs,
 arguments = arguments,
+stdout = "std.out",
 outputs = outputs)
 
 

@@ -88,7 +88,16 @@ class ExpandingVCFParser(object):
     """
     DEFAULT_BUILD = 'GRCh37'
 
+<<<<<<< HEAD
     def __init__(self, fsock=None, **kwargs):
+=======
+<<<<<<< HEAD
+    def __init__(self, filename, **kwargs):
+        self._filename = filename
+=======
+    def __init__(self, fsock=None, **kwargs):
+>>>>>>> ad4b9c8bf7e0a2cf736005ddba4452512ba4d327
+>>>>>>> 229d0f632b84914e16a0ea24506460817a6dd9e0
         self._reader = None
         self._line_number = -1
         self._next = []
@@ -111,6 +120,13 @@ class ExpandingVCFParser(object):
             # on '\t' only. This enables proper handling
             # of INFO fields with spaces.
             self._reader = self.reader_class(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                filename=self._filename,
+=======
+>>>>>>> ad4b9c8bf7e0a2cf736005ddba4452512ba4d327
+>>>>>>> 229d0f632b84914e16a0ea24506460817a6dd9e0
                 **self.reader_kwargs
             )
 
@@ -260,7 +276,15 @@ if __name__ == '__main__':
         print("Usage: python {0} sample.vcf".format(sys.argv[0]))
         sys.exit(1)
 
+<<<<<<< HEAD
     parser = ExpandingVCFParser(filename=sys.argv[1], genome_build='GRCh37')
+=======
+<<<<<<< HEAD
+    parser = ExpandingVCFParser(sys.argv[1], genome_build='GRCh37')
+=======
+    parser = ExpandingVCFParser(filename=sys.argv[1], genome_build='GRCh37')
+>>>>>>> ad4b9c8bf7e0a2cf736005ddba4452512ba4d327
+>>>>>>> 229d0f632b84914e16a0ea24506460817a6dd9e0
     for row in parser:
         print(json.dumps(row))
 

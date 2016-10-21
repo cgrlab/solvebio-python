@@ -28,7 +28,7 @@
       "outputBinding": {
         "glob": {
           "engine": "#cwl-js-engine",
-          "script": "\"*.vcf.json\"",
+          "script": "\"*.vcf.json.gz\"",
           "class": "Expression"
         },
         "sbg:inheritMetadataFrom": "#vcf",
@@ -60,7 +60,7 @@
   ],
   "arguments": [
     {
-      "position": 2,
+      "position": 101,
       "prefix": ">",
       "separate": true,
       "valueFrom": {
@@ -70,7 +70,17 @@
       }
     },
     {
-      "position": 3,
+      "position": 102,
+      "prefix": "&&",
+      "separate": true,
+      "valueFrom": {
+        "engine": "#cwl-js-engine",
+        "script": "{\nvar name = $job.inputs.vcf.name.split(\".vcf\")[0]; return \"gzip \" + name + \".vcf.json\"}",
+        "class": "Expression"
+      }
+    },
+    {
+      "position": 199,
       "separate": true,
       "valueFrom": {
         "engine": "#cwl-js-engine",

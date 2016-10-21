@@ -39,9 +39,12 @@ input(id = "vcf", label = "vcf", description = ".vcf or .vcf.gz", type = "File",
 
 arguments = (CCBList(
   
-CommandLineBinding(position = 2, prefix = ">", valueFrom = list('{var name = $job.inputs.vcf.name.split(".vcf")[0]; return name + ".vcf.json"}')),
+CommandLineBinding(position = 101, prefix = ">", valueFrom = list('{var name = $job.inputs.vcf.name.split(".vcf")[0]; return name + ".vcf.json"}')),
   
-CommandLineBinding(position = 3, valueFrom = list('"&& ls -lhrt"'))
+CommandLineBinding(position = 102, prefix = "&&", valueFrom = list('{
+var name = $job.inputs.vcf.name.split(".vcf")[0]; return "gzip " + name + ".vcf.json"}')),
+  
+CommandLineBinding(position = 199, valueFrom = list('"&& ls -lhrt"'))
   
 ))
 
@@ -57,8 +60,7 @@ output(id = "json", label = "json",
 description = "vcf converted to json", type = "File",
 inheritMetadataFrom = "#vcf", metadata = list(tool_created_by = "vcf_parser"),
 glob = Expression(engine = "#cwl-js-engine",
-script = '"*.vcf.json"'))
-  
+script = '"*.vcf.json.gz"'))
 )
 
 

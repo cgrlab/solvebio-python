@@ -19,6 +19,8 @@ RUN pip install PyVCF
 
 RUN git clone https://github.com/solvebio/solvebio-python.git
 
+RUN cd /opt/solvebio-python; python setup.py develop
+
 
 
 
